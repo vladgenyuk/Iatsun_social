@@ -6,6 +6,10 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models
 
 
+def get_default_image() -> str:
+    return 'default/no_user.png'
+
+
 class UserAccountManager(BaseUserManager):
 
     def create_user(self, email, password=None, **kwargs):
@@ -33,6 +37,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=255, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    photo = models.ImageField(upload_to='accounts/', default=get_default_image)
 
     objects = UserAccountManager()
 

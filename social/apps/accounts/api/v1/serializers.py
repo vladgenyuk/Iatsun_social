@@ -10,11 +10,12 @@ User = get_user_model()
 class UserCreateSerializer(djoser_serializers.UserCreateSerializer):
     class Meta(djoser_serializers.UserCreateSerializer.Meta):
         model = User
-        fields = ('id', 'email', 'first_name', 'last_name', 'password')
+        fields = ('id', 'photo', 'email', 'first_name', 'last_name', 'password')
 
 
 class UserSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
+    id = serializers.IntegerField()
     first_name = serializers.CharField(read_only=True)
     last_name = serializers.CharField(read_only=True)
-    email = serializers.EmailField()
+    email = serializers.EmailField(read_only=True)
+    photo = serializers.ImageField()
