@@ -34,6 +34,7 @@ class PublicationSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data: dict, pk=None):
         instance.title = validated_data.get('title')
         instance.content = validated_data.get('content')
+        instance.image = validated_data.get('image')
         instance.updated_at = timezone.now()
         instance.save()
         return instance
