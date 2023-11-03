@@ -1,7 +1,3 @@
-import datetime
-
-from rest_framework.exceptions import APIException
-
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 
@@ -25,6 +21,8 @@ class UserAccountManager(BaseUserManager):
     def create_superuser(self, email, first_name, last_name, password):
 
         user = self.create_user(email, password)
+        user.first_name = first_name
+        user.last_name = last_name
         user.is_staff = True
         user.is_superuser = True
         user.save()

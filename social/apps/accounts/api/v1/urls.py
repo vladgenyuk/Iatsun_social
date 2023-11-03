@@ -1,9 +1,8 @@
-from django.urls import path, re_path, include
-from django.views.generic import TemplateView
+from django.urls import path
 
 from rest_framework.routers import DefaultRouter
 
-from .views import v1, UserApiView
+from .views import v1
 
 router = DefaultRouter()
 

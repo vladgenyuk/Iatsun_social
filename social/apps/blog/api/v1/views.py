@@ -2,11 +2,17 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .serializers import PublicationSerializer
 from apps.blog.models import Publication
-from apps.accounts.models import UserAccount
 
+
+# class MyPublications(APIView):
+#
+#     def get(self, request, publisher_id: int):
+#         my_posts = Publication.objects.filter(publisher_id=publisher_id)
+#         return
 
 class PublicationViewSet(ModelViewSet):
     queryset = Publication.objects.all()

@@ -8,9 +8,17 @@ User = get_user_model()
 
 
 class UserCreateSerializer(djoser_serializers.UserCreateSerializer):
+
     class Meta(djoser_serializers.UserCreateSerializer.Meta):
         model = User
         fields = ('id', 'photo', 'email', 'first_name', 'last_name', 'password')
+
+    def update(self, instance, validated_data):
+        instance.first_name = validated_data.get('first_name', )
+        instance.last_name = validated_data.get('last_name', )
+        instance.photo = validated_data.get('photo', )
+        instance.save()
+        return instance
 
 
 class UserSerializer(serializers.Serializer):
@@ -18,4 +26,4 @@ class UserSerializer(serializers.Serializer):
     first_name = serializers.CharField(read_only=True)
     last_name = serializers.CharField(read_only=True)
     email = serializers.EmailField(read_only=True)
-    photo = serializers.ImageField()
+    photo = serializers.ImageField(read_only=True)

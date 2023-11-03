@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-v%u1^i@^%0x(r&3e5o06&elul68jtihaverkw2$ucuoa7_dh-n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '*', 'iatsun.onrender.com']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -47,6 +47,7 @@ THIRD_PARTY_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'django_cleanup.apps.CleanupConfig',
+    'corsheaders'
 ]
 
 LOCAL_APPS = [
@@ -68,6 +69,7 @@ DJANGO_MIDDLEWARE = [
 THIRD_PARTY_MIDDLEWARE = [
     'social_django.middleware.SocialAuthExceptionMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 MIDDLEWARE = DJANGO_MIDDLEWARE + THIRD_PARTY_MIDDLEWARE
@@ -171,6 +173,8 @@ DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': r'password/reset/confirm/{uid}/{token}',
     'USERNAME_RESET_CONFIRM_URL': r'email/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': r'activate/{uid}/{token}',
+    'SOCIAL_AUTH_TOKEN_STRATEGY': 'djoser.social.token.jwt.TokenStrategy',
+    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': ['http://127.0.0.1:8000/'],
     'SEND_ACTIVATION_EMAIL': True,
     'SERIALIZERS': {
         'user_create': 'apps.accounts.api.v1.serializers.UserCreateSerializer',
@@ -190,9 +194,14 @@ SIMPLE_JWT = {
 }
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.google.GoogleOAuth2',  # o/{provider} google-oauth2
+    'social_core.backends.github.GithubOAuth2',  # o/{provider} github
     'django.contrib.auth.backends.ModelBackend'
 )
+
+CORS_ALLOWED_HEADERS = ['*']
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
