@@ -28,6 +28,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+SITE_NAME = 'Iatsun Social'
+EMAIL_PROTOCOL = 'http'
+EMAIL_DOMAIN = 'localhost:3000'
+
 # Application definition
 
 DJANGO_APPS = [
@@ -181,6 +185,10 @@ DJOSER = {
         'user': 'apps.accounts.api.v1.serializers.UserCreateSerializer',
         'current_user': 'apps.accounts.api.v1.serializers.UserCreateSerializer',
         'user_delete': 'djoser.serializers.UserDeleteSerializer',
+    },
+    'EMAIL': {
+        'activation': 'social.email.MyActivationEmail',
+        'html': True
     }
 }
 

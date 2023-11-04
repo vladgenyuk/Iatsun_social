@@ -8,11 +8,13 @@ from .serializers import PublicationSerializer
 from apps.blog.models import Publication
 
 
-# class MyPublications(APIView):
-#
-#     def get(self, request, publisher_id: int):
-#         my_posts = Publication.objects.filter(publisher_id=publisher_id)
-#         return
+class MyPublications(APIView):
+
+    def get(self, request, publisher_id: int, format=None):
+        my_posts = Publication.objects.filter(publisher_id=publisher_id)
+        serializer = PublicationSerializer(my_posts, many=True)
+        return Response(serializer.data, status=200)
+
 
 class PublicationViewSet(ModelViewSet):
     queryset = Publication.objects.all()

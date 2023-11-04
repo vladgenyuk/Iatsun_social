@@ -1,0 +1,33 @@
+{% load i18n %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+<h1>
+    {% block subject %}
+    {% blocktrans %}Account activation on {{ site_name }}.{% endblocktrans %}
+    {% endblock subject %}
+</h1>
+
+{% block text_body %}
+<h2>You're receiving this email because you need to finish activation process on {{ site_name }}.</h2>
+
+<h3><strong>{% trans "Please go to the following page to activate account:" %}</strong></h3>
+<p>{{ protocol }}://{{ domain }}/{{ url|safe }}</p>
+
+<p>{% trans "Thanks for using our site!" %}</p>
+
+
+{% blocktrans %}The {{ site_name }} team.{% endblocktrans %}
+{% endblock text_body %}
+
+</body>
+</html>

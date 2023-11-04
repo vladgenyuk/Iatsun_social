@@ -1,8 +1,6 @@
 from django.db import models
 from django.utils import timezone
 
-from pytils.translit import slugify
-
 from apps.accounts.models import UserAccount
 
 
@@ -22,6 +20,6 @@ class Publication(models.Model):
     def __str__(self):
         return f'{self.title}'
 
-    @property
-    def slug(self):
-        return slugify(f"{self.pk}-{self.title}")
+    # @property
+    # def slug(self):
+    #     return slugify(f"{self.pk}-{self.title}")
