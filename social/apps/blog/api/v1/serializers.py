@@ -20,7 +20,7 @@ class PublicationSerializer(serializers.ModelSerializer):
         publication = Publication.objects.create(
             title=validated_data.get('title'),
             content=validated_data.get('content'),
-            published_at=timezone.now,
+            published_at=timezone.now(),
             publisher_id=validated_data.get('publisher').get('id'),
             image=validated_data.get('image') or get_default_image()
         )
@@ -31,6 +31,6 @@ class PublicationSerializer(serializers.ModelSerializer):
         instance.title = validated_data.get('title')
         instance.content = validated_data.get('content')
         instance.image = validated_data.get('image') or get_default_image()
-        instance.updated_at = timezone.now
+        instance.updated_at = timezone.now()
         instance.save()
         return instance
