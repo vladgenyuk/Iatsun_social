@@ -20,18 +20,16 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from .yasg import urlpatterns as doc_urls
-from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('core/', include('apps.core.urls')),
-    path('oauth/', views.oauth),
 ]
 
 social_patterns = [
     path('', include('djoser.urls')),
     path('', include('djoser.urls.jwt')),
-    path('', include('djoser.social.urls')),
+    # path('', include('djoser.social.urls')),  # Coming Soon
 ]
 
 urlpatterns += doc_urls

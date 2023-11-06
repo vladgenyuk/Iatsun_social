@@ -10,7 +10,7 @@ from apps.blog.models import Publication
 
 class MyPublications(APIView):
 
-    def get(self, request, publisher_id: int, format=None):
+    def get(self, request, publisher_id: int):
         my_posts = Publication.objects.filter(publisher_id=publisher_id)
         serializer = PublicationSerializer(my_posts, many=True)
         return Response(serializer.data, status=200)
@@ -28,21 +28,30 @@ class PublicationViewSet(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response({'info': 'Publication created',
                              'details': serializer.data}, status=201)
         return Response(serializer.errors, status=400)
 
-    def update(self, request, pk: int = None, partial = None, *args, **kwargs):
+    def update(self, request, pk: int = None, partial=None, *args, **kwargs):
         publication = get_object_or_404(self.queryset, pk=pk)
-        data = dict(publication.__dict__, **request.data)
-        if publication.publisher_id != data.get('publisher').get('id'):
-            return Response(status=403)
-        serializer = self.serializer_class(data=data, partial=True)
-        if serializer.is_valid():
-            serializer.update(publication, data)
+        if publication.publisher_id != int(request.data.get('publisher.id')[0]):
+            return Response({'detail': 'The request.publisher.id != publication.publisher_id'}, status=403)
+        serializer = self.serializer_class(data=request.data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            serializer.update(publication, request.data)
             return Response({"info": "Publication updated",
                              "detail": serializer.data
                              }, status=201)
         return Response(serializer.errors, status=400)
+
+    def destroy(self, request, pk: int = None, *args, **kwargs):
+        publication = get_object_or_404(self.queryset, pk=pk)
+        if publication.publisher_id != int(request.data.get('publisher.id')[0]):
+            return Response({'detail': 'The request.publisher.id != publication.publisher_id'}, status=403)
+        self.perform_destroy(publication)
+        return Response({'info': 'Publication deleted',
+                         'detail': 'success',
+                         }, status=204)
+

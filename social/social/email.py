@@ -1,10 +1,10 @@
+from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
 from djoser.email import ActivationEmail
 
-from .settings import EMAIL_DOMAIN, EMAIL_PROTOCOL
 
 
 class MyActivationEmail(ActivationEmail):
@@ -24,6 +24,6 @@ class MyActivationEmail(ActivationEmail):
 
     def get_context_data(self):
         context = super().get_context_data()
-        context['protocol'] = EMAIL_PROTOCOL
-        context['domain'] = EMAIL_DOMAIN
+        context['protocol'] = settings.EMAIL_PROTOCOL
+        context['domain'] = settings.EMAIL_DOMAIN
         return context
