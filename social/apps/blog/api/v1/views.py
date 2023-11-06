@@ -48,8 +48,6 @@ class PublicationViewSet(ModelViewSet):
 
     def destroy(self, request, pk: int = None, *args, **kwargs):
         publication = get_object_or_404(self.queryset, pk=pk)
-        if publication.publisher_id != int(request.data.get('publisher.id')[0]):
-            return Response({'detail': 'The request.publisher.id != publication.publisher_id'}, status=403)
         self.perform_destroy(publication)
         return Response({'info': 'Publication deleted',
                          'detail': 'success',
