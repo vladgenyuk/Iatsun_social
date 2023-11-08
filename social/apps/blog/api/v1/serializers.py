@@ -16,7 +16,7 @@ class PublicationSerializer(serializers.ModelSerializer):
         model = Publication
         fields = ['id', 'title', 'image', 'content', 'published_at', 'updated_at', 'publisher']
 
-    def create(self, validated_data: dict):
+    def create(self, validated_data: dict, *args, **kwargs):
         publication = Publication.objects.create(
             title=validated_data.get('title'),
             content=validated_data.get('content'),

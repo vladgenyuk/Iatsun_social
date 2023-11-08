@@ -1,3 +1,5 @@
+import jwt
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 
 from rest_framework.viewsets import ModelViewSet
@@ -6,7 +8,7 @@ from rest_framework.views import APIView
 
 from .serializers import PublicationSerializer
 from apps.blog.models import Publication
-
+from social.jwt_decoder import jwt_decode
 
 class MyPublications(APIView):
 
@@ -27,17 +29,26 @@ class PublicationViewSet(ModelViewSet):
         return Response(serializer.data, status=200)
 
     def create(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data)
+        token = request.headers.get('Authorization')
+        user = jwt_decode(token)
+
+        data = request.data.copy()
+        data['publisher.id'] = str(user.get('user_id'))
+        serializer = self.serializer_class(data=data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save()
+            serializer.create(serializer.validated_data)
             return Response({'info': 'Publication created',
                              'details': serializer.data}, status=201)
         return Response(serializer.errors, status=400)
 
     def update(self, request, pk: int = None, partial=None, *args, **kwargs):
         publication = get_object_or_404(self.queryset, pk=pk)
-        if publication.publisher_id != int(request.data.get('publisher.id')[0]):
-            return Response({'detail': 'The request.publisher.id != publication.publisher_id'}, status=403)
+        token = request.headers.get('Authorization')
+        user = jwt_decode(token)
+
+        if user.get('user_id') != publication.publisher_id:
+            return Response({'detail': 'The user ID does not match the publication author ID'}, status=403)
+
         serializer = self.serializer_class(data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
             serializer.update(publication, request.data)
@@ -48,8 +59,13 @@ class PublicationViewSet(ModelViewSet):
 
     def destroy(self, request, pk: int = None, *args, **kwargs):
         publication = get_object_or_404(self.queryset, pk=pk)
+        token = request.headers.get('Authorization')
+        user = jwt_decode(token)
+
+        if user.get('user_id') != publication.publisher_id:
+            return Response({'detail': 'The user ID does not match the publication author ID'}, status=403)
+
         self.perform_destroy(publication)
         return Response({'info': 'Publication deleted',
                          'detail': 'success',
                          }, status=204)
-
