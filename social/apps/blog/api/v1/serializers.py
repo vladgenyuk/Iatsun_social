@@ -7,7 +7,7 @@ from apps.blog.models import Publication, get_default_image
 
 
 class PublicationSerializer(serializers.ModelSerializer):
-    publisher = UserSerializer()
+    publisher = UserSerializer(read_only=True)
     published_at = serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M:%S')
     updated_at = serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M:%S')
     image = serializers.ImageField(required=False)
