@@ -33,7 +33,7 @@ class PublicationViewSet(ModelViewSet):
         user = jwt_decode(token)
 
         data = request.data.copy()
-        data['publisher.id'] = str(user.get('user_id'))
+        data['publisher_id'] = str(user.get('user_id'))
         serializer = self.serializer_class(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.create(serializer.validated_data)

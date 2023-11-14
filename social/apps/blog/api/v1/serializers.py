@@ -8,20 +8,21 @@ from apps.blog.models import Publication, get_default_image
 
 class PublicationSerializer(serializers.ModelSerializer):
     publisher = UserSerializer(read_only=True)
+    publisher_id = serializers.CharField(write_only=True)
     published_at = serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M:%S')
     updated_at = serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M:%S')
     image = serializers.ImageField(required=False)
 
     class Meta:
         model = Publication
-        fields = ['id', 'title', 'image', 'content', 'published_at', 'updated_at', 'publisher']
+        fields = ['id', 'title', 'image', 'content', 'published_at', 'updated_at', 'publisher', 'publisher_id']
 
     def create(self, validated_data: dict, *args, **kwargs):
         publication = Publication.objects.create(
             title=validated_data.get('title'),
             content=validated_data.get('content'),
             published_at=timezone.now(),
-            publisher_id=validated_data.get('publisher').get('id'),
+            publisher_id=validated_data.get('publisher_id'),
             image=validated_data.get('image') or get_default_image()
         )
         publication.save()
