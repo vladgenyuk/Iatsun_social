@@ -30,6 +30,7 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    'debug_toolbar',
     'rest_framework',
     'djoser',
     'drf_yasg',
@@ -54,6 +55,7 @@ DJANGO_MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 THIRD_PARTY_MIDDLEWARE = [

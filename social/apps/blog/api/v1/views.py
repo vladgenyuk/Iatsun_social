@@ -10,16 +10,17 @@ from .serializers import PublicationSerializer
 from apps.blog.models import Publication
 from social.jwt_decoder import jwt_decode
 
+
 class MyPublications(APIView):
 
     def get(self, request, publisher_id: int):
-        my_posts = Publication.objects.filter(publisher_id=publisher_id)
+        my_posts = Publication.objects.filter(publisher_id=publisher_id).select_related('publisher')
         serializer = PublicationSerializer(my_posts, many=True)
         return Response(serializer.data, status=200)
 
 
 class PublicationViewSet(ModelViewSet):
-    queryset = Publication.objects.all()
+    queryset = Publication.objects.all().select_related('publisher')
     permission_classes = []
     serializer_class = PublicationSerializer
 

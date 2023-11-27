@@ -1,5 +1,6 @@
 from .base import *
 
+INTERNAL_IPS = ['127.0.0.1']
 DEBUG = True
 EMAIL_PROTOCOL = 'http'
 EMAIL_DOMAIN = 'localhost:3000'
